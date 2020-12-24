@@ -6,6 +6,7 @@
 //
 
 #import "ViewController.h"
+#import "IMViewController.h"
 @interface ViewController ()
 
 @end
@@ -20,7 +21,8 @@
     
     //
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, 0, 80, 60);
+    btn.frame = CGRectMake(0, 0, 100, 50);
+    btn.layer.cornerRadius = 5.0;
     btn.center = self.view.center;
     btn.backgroundColor = [UIColor blackColor];
     [btn setTitle:@"IM" forState:UIControlStateNormal];
@@ -29,5 +31,8 @@
 }
 -(void)showIM{
     NSLog(@"showIM");
+    
+    IMViewController *im = [[IMViewController alloc]init];
+    [self.navigationController pushViewController:im animated:YES];
 }
 @end
