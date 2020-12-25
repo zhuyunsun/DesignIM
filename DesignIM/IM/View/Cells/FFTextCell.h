@@ -8,8 +8,12 @@
 #import "CommonCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
+///默认文字高度,文字行数没有超过这个高度
+UIKIT_STATIC_INLINE CGFloat cellHeightDefault(void){
+    return cellWindowHeight() *0.15;
+}
 
-@interface TextCell : CommonCell
+@interface FFTextCell : CommonCell
 @property(nonatomic,strong)UILabel *msgLabel;
 @end
 

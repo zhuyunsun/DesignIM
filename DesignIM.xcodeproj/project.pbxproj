@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		FE0944DC25948205006E6B12 /* CommonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FE0944DB25948205006E6B12 /* CommonCell.m */; };
 		FE0944E1259484D1006E6B12 /* CommonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FE0944E0259484D1006E6B12 /* CommonModel.m */; };
-		FE0944E525948577006E6B12 /* TextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FE0944E425948577006E6B12 /* TextCell.m */; };
+		FE0944E525948577006E6B12 /* FFTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FE0944E425948577006E6B12 /* FFTextCell.m */; };
 		FE1A2EDC2594695D00311C2D /* CommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE1A2EDB2594695D00311C2D /* CommonViewController.m */; };
+		FED2AA7F25957D6000983260 /* TextModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FED2AA7E25957D6000983260 /* TextModel.m */; };
 		FEF1837225946A9B007BB87D /* IMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF1837125946A9B007BB87D /* IMViewController.m */; };
 		FEF1837925947A45007BB87D /* CommonView.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF1837825947A45007BB87D /* CommonView.m */; };
 		FEF1837D25947A89007BB87D /* IMDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF1837C25947A89007BB87D /* IMDataView.m */; };
@@ -27,12 +28,14 @@
 		FE0944DB25948205006E6B12 /* CommonCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonCell.m; sourceTree = "<group>"; };
 		FE0944DF259484D1006E6B12 /* CommonModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
 		FE0944E0259484D1006E6B12 /* CommonModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonModel.m; sourceTree = "<group>"; };
-		FE0944E325948577006E6B12 /* TextCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextCell.h; sourceTree = "<group>"; };
-		FE0944E425948577006E6B12 /* TextCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextCell.m; sourceTree = "<group>"; };
+		FE0944E325948577006E6B12 /* FFTextCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFTextCell.h; sourceTree = "<group>"; };
+		FE0944E425948577006E6B12 /* FFTextCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFTextCell.m; sourceTree = "<group>"; };
 		FE1A2ED72594680500311C2D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		FE1A2ED82594680500311C2D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		FE1A2EDA2594695C00311C2D /* CommonViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonViewController.h; sourceTree = "<group>"; };
 		FE1A2EDB2594695D00311C2D /* CommonViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonViewController.m; sourceTree = "<group>"; };
+		FED2AA7D25957D6000983260 /* TextModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextModel.h; sourceTree = "<group>"; };
+		FED2AA7E25957D6000983260 /* TextModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextModel.m; sourceTree = "<group>"; };
 		FEF1837025946A9B007BB87D /* IMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMViewController.h; sourceTree = "<group>"; };
 		FEF1837125946A9B007BB87D /* IMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMViewController.m; sourceTree = "<group>"; };
 		FEF1837725947A45007BB87D /* CommonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonView.h; sourceTree = "<group>"; };
@@ -67,8 +70,8 @@
 			children = (
 				FE0944DA25948205006E6B12 /* CommonCell.h */,
 				FE0944DB25948205006E6B12 /* CommonCell.m */,
-				FE0944E325948577006E6B12 /* TextCell.h */,
-				FE0944E425948577006E6B12 /* TextCell.m */,
+				FE0944E325948577006E6B12 /* FFTextCell.h */,
+				FE0944E425948577006E6B12 /* FFTextCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -90,6 +93,8 @@
 			children = (
 				FE0944DF259484D1006E6B12 /* CommonModel.h */,
 				FE0944E0259484D1006E6B12 /* CommonModel.m */,
+				FED2AA7D25957D6000983260 /* TextModel.h */,
+				FED2AA7E25957D6000983260 /* TextModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -224,7 +229,8 @@
 				FE1A2EDC2594695D00311C2D /* CommonViewController.m in Sources */,
 				FEF384502593340D00863416 /* AppDelegate.m in Sources */,
 				FEF1837D25947A89007BB87D /* IMDataView.m in Sources */,
-				FE0944E525948577006E6B12 /* TextCell.m in Sources */,
+				FED2AA7F25957D6000983260 /* TextModel.m in Sources */,
+				FE0944E525948577006E6B12 /* FFTextCell.m in Sources */,
 				FEF1837225946A9B007BB87D /* IMViewController.m in Sources */,
 				FE0944E1259484D1006E6B12 /* CommonModel.m in Sources */,
 				FEF384612593340E00863416 /* main.m in Sources */,

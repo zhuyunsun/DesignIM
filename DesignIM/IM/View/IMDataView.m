@@ -33,18 +33,30 @@
     
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return self.height *0.1;
+    id model = dataSource[indexPath.row];
+    if ([model isKindOfClass:[TextModel class]]) {
+        return [FFTextCell cellHeight];
+    }
+    return 70;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return dataSource.count;
 }
 - (CommonCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *normalStr = @"normalStr";
-    CommonCell *cell = [tableView dequeueReusableCellWithIdentifier:normalStr];
-    if (cell == nil) {
-        cell = [[CommonCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:normalStr];
+    id model = dataSource[indexPath.row];
+    CommonCell *cell;
+    if ([model isKindOfClass:[TextModel class]]) {
+        //加载文本
+        static NSString *normalStr = @"normalStr";
+        cell = [tableView dequeueReusableCellWithIdentifier:normalStr];
+        if (cell == nil) {
+            cell = [[FFTextCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:normalStr];
+        }
+        [cell changeModel:model];
+        TextModel *modelText = (TextModel *)model;
+        cell.nameLabel.text = modelText.nickName;
+
     }
-    cell.textLabel.text = @"text";
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -57,7 +69,7 @@
     [self.IMTableView reloadData];
 }
 
--(void)addData:(id)model{
+-(void)addData:(CommonModel *)model{
     NSMutableArray *newArr = [[NSMutableArray alloc]initWithArray:dataSource];
     [newArr addObject:model];
     dataSource = [newArr copy];

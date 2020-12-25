@@ -48,6 +48,7 @@
     dataView = [[IMDataView alloc]initWithFrame:oldR1];
     [self.view addSubview:dataView];
     
+    //
     CGRect barRect = CGRectMake(0, CGRectGetMaxY(oldR1),width, inputBarHeight);
     UIView *barView = [[UIView alloc]initWithFrame:barRect];
     barView.backgroundColor = [UIColor blackColor];
@@ -55,7 +56,15 @@
     
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     for (NSUInteger i = 0; i < 50; i ++) {
-        [arr addObject:@"1"];
+        TextModel *model = [[TextModel alloc]init];
+        model.nickName = [NSString stringWithFormat:@"nickName:%ld",i];
+        model.sender = YES;
+        model.headImageURL = @"2";
+        if (i % 2 == 0) {
+            model.sender = NO;
+            model.headImageURL = @"6";
+        }
+        [arr addObject:model];
     }
     dataView.IMDataArray = [arr copy];
 }

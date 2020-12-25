@@ -6,7 +6,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TextCell.h"
+#import "FFTextCell.h"
+#import "TextModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CommonView : UIView
