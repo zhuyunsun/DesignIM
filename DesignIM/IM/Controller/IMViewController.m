@@ -6,7 +6,7 @@
 //
 
 #import "IMViewController.h"
-
+#import "IMTestMessage.h"
 @interface IMViewController (){
     CGFloat height;
     CGFloat width;
@@ -54,18 +54,14 @@
     barView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:barView];
     
+    //
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     for (NSUInteger i = 0; i < 50; i ++) {
-        TextModel *model = [[TextModel alloc]init];
-        model.nickName = [NSString stringWithFormat:@"nickName:%ld",i];
-        model.sender = YES;
-        model.headImageURL = @"2";
-        if (i % 2 == 0) {
-            model.sender = NO;
-            model.headImageURL = @"6";
-        }
+        IMTestMessage *testMsg = [[IMTestMessage alloc]init];
+        IMModel *model = [testMsg randomTextAndPhoto];
         [arr addObject:model];
     }
     dataView.IMDataArray = [arr copy];
 }
+
 @end
