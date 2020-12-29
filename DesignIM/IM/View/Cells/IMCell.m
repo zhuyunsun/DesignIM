@@ -131,7 +131,7 @@
         self.msgLabel.attributedText = model.msg;
         
         self.msgBackView.frame = CGRectMake(x, y, width, cellHeightDefault(model) - y*2);
-        self.msgBackView.backgroundColor = [UIColor redColor];
+        self.msgBackView.backgroundColor = [UIColor lightGrayColor];
         //需要判断文字的行数,一行时,文字靠右;多行时,文字靠左
         if (model.isSender) {
             CGFloat textSize = [UIFont systemFontOfSize:13.1].lineHeight;
