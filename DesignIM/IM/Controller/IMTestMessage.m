@@ -43,6 +43,19 @@
         model.photoName = [NSString stringWithFormat:@"imA%ld",code];
         model.msgType = ModelMessagePhoto;
     }
+    NSDateFormatter *matter = [[NSDateFormatter alloc]init];
+    [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
+    NSString *timeStr = [matter stringFromDate:[NSDate date]];
+    model.time = timeStr;
+    NSLog(@"timer = %@",timeStr);
+    return model;
+}
+-(IMModel *)randomTime{
+    IMModel *model = [[IMModel alloc]init];
+    NSDateFormatter *matter = [[NSDateFormatter alloc]init];
+    [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
+    NSString *timeStr = [matter stringFromDate:[NSDate date]];
+    model.time = timeStr;
     return model;
 }
 -(CGFloat)handelHighContent:(NSString *)content font:(CGFloat)fontSize size:(CGFloat)width{

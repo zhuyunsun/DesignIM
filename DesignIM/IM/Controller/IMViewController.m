@@ -56,12 +56,34 @@
     
     //
     NSMutableArray *arr = [[NSMutableArray alloc]init];
-    for (NSUInteger i = 0; i < 50; i ++) {
+    for (NSUInteger i = 0; i < 10; i ++) {
         IMTestMessage *testMsg = [[IMTestMessage alloc]init];
         IMModel *model = [testMsg randomTextAndPhoto];
         [arr addObject:model];
     }
     dataView.IMDataArray = [arr copy];
+    
+    
+    
+    
+    
+    
+    UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [addBtn setTitle:@"add" forState:UIControlStateNormal];
+    [addBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [addBtn addTarget:self action:@selector(addBtnAction) forControlEvents:UIControlEventTouchDown];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:addBtn];
+
+}
+-(void)addBtnAction{
+    IMTestMessage *testMsg = [[IMTestMessage alloc]init];
+    IMModel *model = [testMsg randomTextAndPhoto];
+    [dataView addData:model];
+    
 }
 
+//
+- (void)viewDidAppear:(BOOL)animated{
+    [dataView scrollBottom:NO];
+}
 @end

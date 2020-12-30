@@ -15,6 +15,7 @@ UIKIT_STATIC_INLINE CGFloat cellWindowHeight(){
 UIKIT_STATIC_INLINE CGFloat cellWindowWidth(){
     return [UIScreen mainScreen].bounds.size.width;
 }
+
 ///默认文字高度,文字行数没有超过这个高度
 UIKIT_STATIC_INLINE CGFloat cellHeightDefault(IMModel *model){
     CGFloat textHeight = cellWindowHeight() *0.13;

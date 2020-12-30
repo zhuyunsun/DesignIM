@@ -28,29 +28,48 @@
     self.IMTableView.tableFooterView = [[UIView alloc]init];
     [self addSubview:self.IMTableView];
     
-    
     self.userInteractionEnabled = YES;
     
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    IMModel *model = dataSource[indexPath.row];
-    return [IMCell cellHeightModel:model];
+    id model = dataSource[indexPath.row];
+    if ([model isKindOfClass:[IMModel class]]) {
+        return [IMCell cellHeightModel:model];
+    }
+    return [UIScreen mainScreen].bounds.size.height / 35;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return dataSource.count;
 }
-- (IMCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    IMModel *model = dataSource[indexPath.row];
-    //
-    NSString *normalStr = [IMCell cellStrModel:model];
-    IMCell *cell = [tableView dequeueReusableCellWithIdentifier:normalStr];
-    if (cell == nil) {
-        cell = [[IMCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:normalStr model:model];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    id model = dataSource[indexPath.row];
+    if ([model isKindOfClass:[IMModel class]]) {
+        //
+        IMModel *m1 = (IMModel *)model;
+        NSString *normalStr = [IMCell cellStrModel:m1];
+        IMCell *cell = [tableView dequeueReusableCellWithIdentifier:normalStr];
+        if (cell == nil) {
+            cell = [[IMCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:normalStr model:m1];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell changeModel:m1];//数据在这里加载
+        /*
+         关于时间model添加,每添加一条消息的时候,判断当前消息和上一条消息的时间差,在某个范围之内不添加,范围之外则添加;
+         */
+        return cell;
+
+    }else{
+        //
+        IMTimeModel *m2 = (IMTimeModel *)model;
+        static NSString *timeStr = @"timeStr";
+        IMTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:timeStr];
+        if (cell == nil) {
+            cell = [[IMTimeCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:timeStr];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.timeLabel.text = m2.time;
+        return cell;
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell changeModel:model];//数据在这里加载
-    
-    return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -64,14 +83,62 @@
 
 -(void)addData:(IMModel *)model{
     NSMutableArray *newArr = [[NSMutableArray alloc]initWithArray:dataSource];
+    NSInteger code = 0;
+    //这个方法插入的数据肯定是数据而不是时间model,时间model只是在判断下觉得是否要插入
+    NSLog(@"dataSource.count = %ld",dataSource.count);
+    id model1 = [dataSource lastObject];
+    if ([model1 isKindOfClass:[IMModel class]]) {
+        IMModel *model2 = (IMModel *)model1;
+        NSLog(@"timer = %@ , newTimer = %@",model2.time,model.time);
+        
+        NSDateFormatter *matter = [[NSDateFormatter alloc]init];
+        [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
+        NSDate *date = [matter dateFromString:model2.time];
+        NSDate *date1 = [matter dateFromString:model.time];
+        NSTimeInterval timeInterval = - [date timeIntervalSinceDate:date1];
+        if (timeInterval < 60) {//60秒
+            NSLog(@"不超过");
+            code = 0;
+        }else{
+            NSLog(@"超过");
+            //添加时间Model,内部处理
+            IMTimeModel *timeModel = [[IMTimeModel alloc]init];
+            timeModel.time = model.time;
+            [newArr addObject:timeModel];
+            code = 1;
+        }
+    }else{
+        
+    }
+    
+
+    
     [newArr addObject:model];
     dataSource = [newArr copy];
-    [self.IMTableView reloadData];
+
+    if (code == 0) {
+        NSIndexPath *myIndexPath = [NSIndexPath indexPathForRow:dataSource.count - 1 inSection:0];
+        [self.IMTableView insertRowsAtIndexPaths:@[myIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.IMTableView selectRowAtIndexPath:myIndexPath animated:YES scrollPosition:UITableViewScrollPositionBottom];
+    }else{
+        NSIndexPath *myIndexPath = [NSIndexPath indexPathForRow:dataSource.count - 2 inSection:0];
+        NSIndexPath *myIndexPath1 = [NSIndexPath indexPathForRow:dataSource.count - 1 inSection:0];
+        [self.IMTableView insertRowsAtIndexPaths:@[myIndexPath,myIndexPath1] withRowAnimation:UITableViewRowAnimationNone];
+        [self.IMTableView selectRowAtIndexPath:myIndexPath1 animated:YES scrollPosition:UITableViewScrollPositionBottom];
+    }
+
+//    [self.IMTableView reloadData];
+    
+//    [self scrollBottom:YES];
+}
+-(void)scrollBottom:(BOOL)animated{
+    NSIndexPath *path = [NSIndexPath indexPathForRow:dataSource.count - 1 inSection:0];
+    [self.IMTableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:animated];
 }
 - (void)layoutSubviews{
     [super layoutSubviews];
-    NSLog(@"发生改变");
 }
+
 @end
 
 /*

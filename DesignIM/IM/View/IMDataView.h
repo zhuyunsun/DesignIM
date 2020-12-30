@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy)NSArray<IMModel *> *IMDataArray;
 
 -(void)addData:(IMModel *)model;
+-(void)scrollBottom:(BOOL)animated;
 @end
 
 NS_ASSUME_NONNULL_END

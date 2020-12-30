@@ -7,6 +7,8 @@
 
 #import <UIKit/UIKit.h>
 #import "IMModel.h"
+#import "IMTimeCell.h"
+#import "IMTimeModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CommonView : UIView
