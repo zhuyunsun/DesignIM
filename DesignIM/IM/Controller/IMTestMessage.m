@@ -50,8 +50,8 @@
     NSLog(@"timer = %@",timeStr);
     return model;
 }
--(IMModel *)randomTime{
-    IMModel *model = [[IMModel alloc]init];
+-(IMTimeModel *)randomTime{
+    IMTimeModel *model = [[IMTimeModel alloc]init];
     NSDateFormatter *matter = [[NSDateFormatter alloc]init];
     [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
     NSString *timeStr = [matter stringFromDate:[NSDate date]];

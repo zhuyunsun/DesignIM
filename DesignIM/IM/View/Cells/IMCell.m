@@ -76,29 +76,26 @@
     if (model.msgType == ModelMessageText) {
       static NSString *textStr = @"textStr";
       return textStr;
-    }
+    }else
     if (model.msgType == ModelMessagePhoto) {
       static NSString *photoStr = @"photoStr";
       return photoStr;
-    }
+    }else
     if (model.msgType == ModelMessageMap) {
       static NSString *mapStr = @"mapStr";
       return mapStr;
-    }
+    }else
     if (model.msgType == ModelMessageVoice) {
       static NSString *voiceStr = @"voiceStr";
       return voiceStr;
-    }
+    }else
     if (model.msgType == ModelMessageVideo) {
       static NSString *videoStr = @"videoStr";
       return videoStr;
-    }
-    if (model.msgType == ModelMessageFile) {
+    }else{//model.msgType == ModelMessageFile
       static NSString *fileStr = @"fileStr";
       return fileStr;
     }
-    static NSString *timeStr = @"timeStr";
-    return timeStr;
 }
 -(void)changeModel:(IMModel *)model{
     /*

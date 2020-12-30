@@ -26,6 +26,7 @@
     self.IMTableView.dataSource = self;
     self.IMTableView.delegate = self;
     self.IMTableView.tableFooterView = [[UIView alloc]init];
+    self.IMTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self addSubview:self.IMTableView];
     
     self.userInteractionEnabled = YES;
@@ -84,17 +85,26 @@
 -(void)addData:(IMModel *)model{
     NSMutableArray *newArr = [[NSMutableArray alloc]initWithArray:dataSource];
     NSInteger code = 0;
-    //这个方法插入的数据肯定是数据而不是时间model,时间model只是在判断下觉得是否要插入
-    NSLog(@"dataSource.count = %ld",dataSource.count);
-    id model1 = [dataSource lastObject];
-    if ([model1 isKindOfClass:[IMModel class]]) {
-        IMModel *model2 = (IMModel *)model1;
-        NSLog(@"timer = %@ , newTimer = %@",model2.time,model.time);
+    //这个方法插入的数据肯定是数据而不是时间model,时间model只是在判断下觉得是否要插入(是不是跟最新的时间model比较?)
+#pragma mark 对时间进行判断,是否要插入时间model;
+    NSMutableArray *timeArr = [[NSMutableArray alloc]init];
+    for (NSUInteger i = 0; i < newArr.count; i ++) {
+        id m = newArr[i];
+        if ([m isKindOfClass:[IMTimeModel class]]) {
+            [timeArr addObject:m];
+        }
+    }
+    
+    
+    if (timeArr.count > 0) {
+        id model1 = [timeArr lastObject];//找出最新的timeModel,跟最新的消息比较,如果没有新加;
+        IMTimeModel *model2 = (IMTimeModel *)model1;
         
         NSDateFormatter *matter = [[NSDateFormatter alloc]init];
-        [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
-        NSDate *date = [matter dateFromString:model2.time];
-        NSDate *date1 = [matter dateFromString:model.time];
+        [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        NSDate *date = [matter dateFromString:model2.time];//最新时间model的时间
+        NSDate *date1 = [matter dateFromString:model.time];//当前消息的时间
+        
         NSTimeInterval timeInterval = - [date timeIntervalSinceDate:date1];
         if (timeInterval < 60) {//60秒
             NSLog(@"不超过");
@@ -107,11 +117,8 @@
             [newArr addObject:timeModel];
             code = 1;
         }
-    }else{
-        
-    }
-    
 
+    }
     
     [newArr addObject:model];
     dataSource = [newArr copy];

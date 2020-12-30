@@ -56,11 +56,13 @@
     
     //
     NSMutableArray *arr = [[NSMutableArray alloc]init];
+    IMTestMessage *testMsg = [[IMTestMessage alloc]init];
     for (NSUInteger i = 0; i < 10; i ++) {
-        IMTestMessage *testMsg = [[IMTestMessage alloc]init];
         IMModel *model = [testMsg randomTextAndPhoto];
         [arr addObject:model];
     }
+    
+    [arr insertObject:[testMsg randomTime] atIndex:arr.count - 1];
     dataView.IMDataArray = [arr copy];
     
     
@@ -79,7 +81,6 @@
     IMTestMessage *testMsg = [[IMTestMessage alloc]init];
     IMModel *model = [testMsg randomTextAndPhoto];
     [dataView addData:model];
-    
 }
 
 //
