@@ -87,17 +87,20 @@
     NSInteger code = 0;
     //这个方法插入的数据肯定是数据而不是时间model,时间model只是在判断下觉得是否要插入(是不是跟最新的时间model比较?)
 #pragma mark 对时间进行判断,是否要插入时间model;
+    
+    //数据足够多,比如上万条的时候,查找时间model会比较耗时.这是个问题! 从数组后面往前面开始查找,找到一个即可
     NSMutableArray *timeArr = [[NSMutableArray alloc]init];
     for (NSUInteger i = 0; i < newArr.count; i ++) {
-        id m = newArr[i];
+        id m = newArr[newArr.count - i - 1];
         if ([m isKindOfClass:[IMTimeModel class]]) {
             [timeArr addObject:m];
+            break;//找到最新的时间model,跳出整个循环;
         }
     }
     
     
-    if (timeArr.count > 0) {
-        id model1 = [timeArr lastObject];//找出最新的timeModel,跟最新的消息比较,如果没有新加;
+    if (timeArr.count > 0) {//找出最新的timeModel,跟最新的消息比较,如果没有新加;
+        id model1 = [timeArr lastObject];
         IMTimeModel *model2 = (IMTimeModel *)model1;
         
         NSDateFormatter *matter = [[NSDateFormatter alloc]init];
@@ -118,6 +121,12 @@
             code = 1;
         }
 
+    }else{
+        //添加时间Model,内部处理
+        IMTimeModel *timeModel = [[IMTimeModel alloc]init];
+        timeModel.time = model.time;
+        [newArr addObject:timeModel];
+        code = 1;
     }
     
     [newArr addObject:model];

@@ -65,11 +65,6 @@
     [arr insertObject:[testMsg randomTime] atIndex:arr.count - 1];
     dataView.IMDataArray = [arr copy];
     
-    
-    
-    
-    
-    
     UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [addBtn setTitle:@"add" forState:UIControlStateNormal];
     [addBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

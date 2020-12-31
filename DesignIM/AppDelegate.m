@@ -22,3 +22,6 @@
     return YES;
 }
 @end
+/*
+ NO plan,NO rule,maybe NO future.
+ */
