@@ -7,11 +7,24 @@
 
 #import "IMViewController.h"
 #import "IMTestMessage.h"
-@interface IMViewController (){
+#import "IMInputView.h"
+@interface IMViewController ()<InputHeightDelegate>{
     CGFloat height;
     CGFloat width;
     
     IMDataView *dataView;
+    UITapGestureRecognizer *tapGesture;
+    
+    IMInputView *inputView;
+    
+    
+    CGRect oldDataRect;
+    CGRect oldInputRect;
+    
+    CGFloat iphoneXBottom;
+    CGFloat iphoneXTop;
+    
+    CGFloat  boardHeight;//键盘高度
 }
 
 @end
@@ -36,6 +49,9 @@
      第三部分
      机型适配
      
+     
+     输入框操作导致的变化,
+     多出的部分,展示信息上移的高,
      */
     //
     
@@ -44,15 +60,27 @@
     
     //
     CGFloat inputBarHeight = 55;
-    CGRect oldR1 = CGRectMake(0, 0, width, height - 88 - 34 - inputBarHeight);
+    
+    iphoneXBottom = 34;
+    iphoneXBottom = 0.0;
+    iphoneXTop = 88;
+    iphoneXTop = 64;
+    
+    
+    CGRect oldR1 = CGRectMake(0, 0, width, height - iphoneXTop - iphoneXBottom - inputBarHeight);
     dataView = [[IMDataView alloc]initWithFrame:oldR1];
     [self.view addSubview:dataView];
-    
+    dataView.IMTableView.userInteractionEnabled = YES;
+    tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
+    [dataView.IMTableView addGestureRecognizer:tapGesture];
+    oldDataRect = oldR1;
     //
-    CGRect barRect = CGRectMake(0, CGRectGetMaxY(oldR1),width, inputBarHeight);
-    UIView *barView = [[UIView alloc]initWithFrame:barRect];
-    barView.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:barView];
+    CGRect barRect = CGRectMake(0, CGRectGetMaxY(oldR1),width, inputBarHeight + iphoneXBottom);
+    inputView = [[IMInputView alloc]initWithFrame:barRect];
+    inputView.backgroundColor = [UIColor lightGrayColor];
+    inputView.delegate = self;
+    [self.view addSubview:inputView];
+    oldInputRect = barRect;
     
     //
     NSMutableArray *arr = [[NSMutableArray alloc]init];
@@ -71,13 +99,164 @@
     [addBtn addTarget:self action:@selector(addBtnAction) forControlEvents:UIControlEventTouchDown];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:addBtn];
 
+    [self addKeyWordBoard];
 }
+-(void)addKeyWordBoard{
+    NSLog(@"addKeyWordBoard");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyWindowShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyWindowHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+-(void)keyWindowShow:(NSNotification *)noti{
+    NSLog(@"键盘弹出");
+    if (inputView.boxState == InputBoxKeyboard) {
+        
+        return;
+    }
+    inputView.boxState = InputBoxKeyboard;
+    NSDictionary *useInfo = [noti userInfo];
+    NSValue *value = [useInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    if([noti.name isEqualToString:UIKeyboardWillShowNotification]){
+        boardHeight = [value CGRectValue].size.height;
+        [self becomNormal];
+        [self getKeyBoardMoreHeight:boardHeight];
+    }
+}
+-(void)keyWindowHide:(NSNotification *)noti{
+//    [self becomNormal];
+}
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+- (void)getKeyBoardMoreHeight:(CGFloat)moreHeight{//给弹出键盘用
+    NSLog(@"moreHeight = %f",moreHeight);
+    moreHeight = moreHeight - iphoneXBottom;
+    
+    [dataView.IMTableView addGestureRecognizer:tapGesture];
+    
+    CGRect r1 = dataView.frame;
+    r1.size.height = r1.size.height - moreHeight;
+    [UIView animateWithDuration:0.23 animations:^{
+        dataView.frame = r1;
+        dataView.IMTableView.frame = r1;
+        CGPoint offset = CGPointMake(0, dataView.IMTableView.contentSize.height - dataView.IMTableView.frame.size.height);
+        if (offset.y > 0) {
+            [dataView.IMTableView setContentOffset:offset animated:NO];
+        }
+    } completion:^(BOOL finished) {
+    }];
+    
+    //
+    CGRect r2 = inputView.frame;
+    r2.origin.y = r2.origin.y - moreHeight;
+    [UIView animateWithDuration:0.23 animations:^{
+        inputView.frame = r2;
+    }];
+    
+    
+}
+
+
+- (void)getMoreHeight:(CGFloat)moreHeight{//给弹出键盘用
+    NSLog(@"moreHeight = %f",moreHeight);
+    moreHeight = moreHeight - iphoneXBottom;
+    
+    [dataView.IMTableView addGestureRecognizer:tapGesture];
+    
+    CGRect r1 = dataView.frame;
+    r1.size.height = r1.size.height - moreHeight;
+    [UIView animateWithDuration:0.23 animations:^{
+        dataView.frame = r1;
+        dataView.IMTableView.frame = r1;
+        CGPoint offset = CGPointMake(0, dataView.IMTableView.contentSize.height - dataView.IMTableView.frame.size.height);
+        if (offset.y > 0) {
+            [dataView.IMTableView setContentOffset:offset animated:NO];
+        }
+    } completion:^(BOOL finished) {
+    }];
+    
+    //
+    CGRect r2 = inputView.frame;
+    r2.origin.y = r2.origin.y - moreHeight;
+    r2.size.height = r2.size.height + 200;//加上faceview的高度
+    [UIView animateWithDuration:0.23 animations:^{
+        inputView.frame = r2;
+    }];
+    
+    
+}
+#pragma mark delegate
+- (void)hideKeybord{
+    if (inputView.boxState == InputBoxKeyboard) {
+        //键盘状态,关闭键盘
+        [[UIApplication sharedApplication]sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    }
+    inputView.boxState = InputBoxVoice;
+    //恢复正常位置
+    [self becomNormal];
+}
+- (void)showFaceView:(CGFloat)moreHeight{
+    if (inputView.boxState == InputBoxNormal) {
+        [self getMoreHeight:moreHeight];
+    }
+    if (inputView.boxState == InputBoxVoice) {
+        [self getMoreHeight:moreHeight];
+    }
+    if (inputView.boxState == InputBoxKeyboard) {
+         /*
+          1,键盘高度
+          2,faceview高度
+          3,从键盘切换到faceview
+          */
+        [[UIApplication sharedApplication]sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+        CGFloat newHeight = boardHeight - moreHeight;
+        if (newHeight > 0) {
+            newHeight = - newHeight;
+        }
+        [self getMoreHeight: newHeight];
+    }
+    inputView.boxState = InputBoxFace;
+}
+-(void)showOtherView:(CGFloat)moreHeight{
+    if (inputView.boxState == InputBoxNormal) {
+        [self getMoreHeight:moreHeight];
+    }
+    if (inputView.boxState == InputBoxVoice) {
+        [self getMoreHeight:moreHeight];
+    }
+    if (inputView.boxState == InputBoxKeyboard) {
+        [[UIApplication sharedApplication]sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+        CGFloat newHeight = boardHeight - moreHeight;
+        if (newHeight > 0) {
+            newHeight = - newHeight;
+        }
+        [self getMoreHeight: newHeight];
+    }
+    inputView.boxState = InputBoxOther;
+}
+#pragma mark acrions
 -(void)addBtnAction{
     IMTestMessage *testMsg = [[IMTestMessage alloc]init];
     IMModel *model = [testMsg randomTextAndPhoto];
     [dataView addData:model];
 }
-
+-(void)tapAction{
+    [[UIApplication sharedApplication]sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    inputView.boxState = InputBoxNormal;
+    [self becomNormal];
+}
+-(void)becomNormal{
+    [dataView.IMTableView removeGestureRecognizer:tapGesture];
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        dataView.frame = oldDataRect;
+        dataView.IMTableView.frame = oldDataRect;
+        inputView.frame = oldInputRect;
+    }];
+}
 //
 - (void)viewDidAppear:(BOOL)animated{
     [dataView scrollBottom:NO];

@@ -47,7 +47,7 @@
     [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
     NSString *timeStr = [matter stringFromDate:[NSDate date]];
     model.time = timeStr;
-    NSLog(@"timer = %@",timeStr);
+//    NSLog(@"timer = %@",timeStr);
     return model;
 }
 -(IMTimeModel *)randomTime{
