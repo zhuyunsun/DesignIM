@@ -8,7 +8,7 @@
 #import "IMViewController.h"
 #import "IMTestMessage.h"
 #import "IMInputView.h"
-@interface IMViewController ()<InputHeightDelegate>{
+@interface IMViewController ()<InputHeightDelegate,IMOtherDelegate>{
     CGFloat height;
     CGFloat width;
     
@@ -62,9 +62,9 @@
     CGFloat inputBarHeight = 55;
     
     iphoneXBottom = 34;
-    iphoneXBottom = 0.0;
+//    iphoneXBottom = 0.0;
     iphoneXTop = 88;
-    iphoneXTop = 64;
+//    iphoneXTop = 64;
     
     
     CGRect oldR1 = CGRectMake(0, 0, width, height - iphoneXTop - iphoneXBottom - inputBarHeight);
@@ -79,6 +79,7 @@
     inputView = [[IMInputView alloc]initWithFrame:barRect];
     inputView.backgroundColor = [UIColor lightGrayColor];
     inputView.delegate = self;
+    inputView.otherView.delegate = self;
     [self.view addSubview:inputView];
     oldInputRect = barRect;
     
@@ -162,7 +163,7 @@
 
 - (void)getMoreHeight:(CGFloat)moreHeight{//给弹出键盘用
     NSLog(@"moreHeight = %f",moreHeight);
-    moreHeight = moreHeight - iphoneXBottom;
+//    moreHeight = moreHeight - iphoneXBottom;
     
     [dataView.IMTableView addGestureRecognizer:tapGesture];
     
@@ -181,7 +182,7 @@
     //
     CGRect r2 = inputView.frame;
     r2.origin.y = r2.origin.y - moreHeight;
-    r2.size.height = r2.size.height + 200;//加上faceview的高度
+    r2.size.height = r2.size.height + 300 - 34;//加上faceview的高度
     [UIView animateWithDuration:0.23 animations:^{
         inputView.frame = r2;
     }];
@@ -214,9 +215,9 @@
         [[UIApplication sharedApplication]sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
         CGFloat newHeight = boardHeight - moreHeight;
         if (newHeight > 0) {
-            newHeight = - newHeight;
+            newHeight = - newHeight + iphoneXBottom;
         }
-        [self getMoreHeight: newHeight];
+        [self getMoreHeight:newHeight];
     }
     inputView.boxState = InputBoxFace;
 }
@@ -231,11 +232,15 @@
         [[UIApplication sharedApplication]sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
         CGFloat newHeight = boardHeight - moreHeight;
         if (newHeight > 0) {
-            newHeight = - newHeight;
+            newHeight = - newHeight + iphoneXBottom;
         }
         [self getMoreHeight: newHeight];
     }
     inputView.boxState = InputBoxOther;
+}
+#pragma mark other delegate
+- (void)getOtherAction:(IMOtherState)stateAction{
+    NSLog(@"stateAction:%ld",stateAction);
 }
 #pragma mark acrions
 -(void)addBtnAction{
@@ -249,6 +254,8 @@
     [self becomNormal];
 }
 -(void)becomNormal{
+
+    [inputView hideFaceAndOther];
     [dataView.IMTableView removeGestureRecognizer:tapGesture];
     
     [UIView animateWithDuration:0.25 animations:^{
