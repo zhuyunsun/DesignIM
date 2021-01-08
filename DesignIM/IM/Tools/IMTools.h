@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface IMTools : NSObject
 //带有表情的文本
 +(NSMutableAttributedString *)formatMessageString:(NSString *)text fontSize:(CGFloat)font1;
+/// 图片写进沙盒的路径
++(NSString *)getPath:(UIImage*)image;
 @end
 
 NS_ASSUME_NONNULL_END

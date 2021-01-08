@@ -26,8 +26,8 @@ UIKIT_STATIC_INLINE CGFloat cellHeightDefault(IMModel *model){
 }
 ///图片cell的高度,给2个高度,当图片高比宽大时,返回更大的高度
 UIKIT_STATIC_INLINE CGFloat cellHeightPhoto(IMModel *model){
-    if (model.photoName != nil) {
-        UIImage *image = [UIImage imageNamed:model.photoName];
+    if (model.photo != nil) {
+        UIImage *image = model.photo;
         if (image.size.height != 0.0 && image.size.width != 0.0) {
             if (image.size.height > image.size.width) {
                 return cellWindowHeight() *0.23;

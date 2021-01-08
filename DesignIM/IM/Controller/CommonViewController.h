@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "IMDataView.h"
+#import "IMTools.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CommonViewController : UIViewController

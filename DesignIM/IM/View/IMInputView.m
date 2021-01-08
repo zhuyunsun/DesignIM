@@ -129,6 +129,7 @@
 
 - (void)getFaceName:(NSString *)name{
     NSLog(@"表情名称:%@",name);
+    msgTextView.text = [msgTextView.text stringByAppendingString:name];
 }
 - (void)getDeleteAction{
     NSLog(@"删除操作");

@@ -146,11 +146,11 @@
     
     //photo
     if (model.msgType == ModelMessagePhoto) {
-        if (model.photoName == nil) {
-            //图片加载不到的情况?
-            
-        }
-        UIImage *image = [UIImage imageNamed:model.photoName];
+        /*
+         图片来源:
+         本地图片,网络图片地址
+         */
+        UIImage *image = model.photo;
         self.photoImageView.image = image;
         
         CGFloat photoX = 0.0;

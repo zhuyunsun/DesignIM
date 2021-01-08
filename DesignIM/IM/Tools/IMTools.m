@@ -99,4 +99,19 @@
     return [attributeString copy];
     
 }
+
++(NSString *)getPath:(UIImage*)image{
+    NSData *data;
+    data = UIImageJPEGRepresentation(image, 0.3);//图片压缩
+    //设置时间格式,用时间来对写进沙盒的头像进行命名
+    NSDateFormatter * formatter = [[NSDateFormatter alloc]init];
+    formatter.dateFormat = @"yyyyMMddHHmmss";
+    NSString * dateString = [formatter stringFromDate:[NSDate date]];
+    NSString * strSuji = [[NSString alloc]initWithFormat:@"/Library/Caches/%@.png",dateString];
+    NSString * path = [NSHomeDirectory() stringByAppendingString:strSuji];
+    NSFileManager * file = [NSFileManager defaultManager];
+    [file createFileAtPath:path contents:data attributes:nil];
+    return path;
+}
+
 @end

@@ -8,7 +8,7 @@
 #import "IMViewController.h"
 #import "IMTestMessage.h"
 #import "IMInputView.h"
-@interface IMViewController ()<InputHeightDelegate,IMOtherDelegate>{
+@interface IMViewController ()<InputHeightDelegate,IMOtherDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
     CGFloat height;
     CGFloat width;
     
@@ -241,7 +241,48 @@
 #pragma mark other delegate
 - (void)getOtherAction:(IMOtherState)stateAction{
     NSLog(@"stateAction:%ld",stateAction);
+    if (stateAction == IMOtherStatePhoto) {
+        [self selectImage];
+    }
 }
+//获取相片
+-(void)selectImage{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == YES) {
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePicker.allowsEditing = NO;
+        imagePicker.delegate = self;
+        imagePicker.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self.navigationController presentViewController:imagePicker animated:YES completion:nil];
+    }else{
+        //
+        NSLog(@"访问相册失败");
+    }
+}
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey,id> *)info{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    NSLog(@"获取图片");
+    /*
+     获取到的图片处理:
+     1,先把图片以时间的命名格式命名
+     2,写进沙盒
+     3,再从沙盒中拿图片
+     */
+    
+    NSData *data = [NSData dataWithContentsOfFile:[IMTools getPath:image]];
+    UIImage *image1 = [[UIImage alloc]initWithData:data];
+    
+    IMTestMessage *testMsg = [[IMTestMessage alloc]init];
+    IMModel *model = [testMsg randomPhoto:image1];
+    [dataView addData:model];
+    
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"取消");
+}
+
 #pragma mark acrions
 -(void)addBtnAction{
     IMTestMessage *testMsg = [[IMTestMessage alloc]init];

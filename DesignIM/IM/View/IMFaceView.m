@@ -69,7 +69,7 @@ static NSString *cellStr = @"faceCell1";
          思考:
          如果表情个数刚好被删除按钮和发送按钮挡住怎么办?
          
-         填充空数据进数组
+         填充空数据进数组,增加cell的个数;
          
          */
         NSLog(@"高度 = %f",faceCollectView.collectionViewLayout.collectionViewContentSize.height);
@@ -100,8 +100,12 @@ static NSString *cellStr = @"faceCell1";
         NSLog(@"越界?NO,插入的空数据图片名称");
         return;
     }
-    NSString *name = dataSource[row];
     if ([self.delegate respondsToSelector:@selector(getFaceName:)]) {
+        NSString *name = dataSource[row];
+        //左右加[],保证和文本不一样.
+        name = [@"[" stringByAppendingString:name];
+        name = [name stringByAppendingString:@"]"];
+        
         [self.delegate getFaceName:name];
     }
 }
@@ -112,7 +116,8 @@ static NSString *cellStr = @"faceCell1";
         NSLog(@"复用");
     }
     if (indexPath.row < dataSource.count) {
-        cell.imageView.image = [UIImage imageNamed:dataSource[indexPath.row]];
+        NSString *imageName = dataSource[indexPath.row];
+        cell.imageView.image = [UIImage imageNamed:imageName];
     }
     return cell;
 }

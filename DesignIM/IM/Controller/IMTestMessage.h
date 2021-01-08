@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface IMTestMessage : NSObject
 /// 模拟随机文字和图片数据
 -(IMModel *)randomTextAndPhoto;
+-(IMModel *)randomPhoto:(UIImage *)image;
 ///时间model
 -(IMTimeModel *)randomTime;
 @end

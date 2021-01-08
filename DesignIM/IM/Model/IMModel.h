@@ -23,13 +23,12 @@ typedef NS_ENUM(NSUInteger,ModelMessageType){
 @property(nonatomic,strong)NSString *headImageURL;
 @property(nonatomic,strong)NSString *time;
 
-//text
+///text
 @property(nonatomic,strong)NSAttributedString *msg;
 ///富文本高度
 @property(nonatomic,assign)CGFloat msgHeight;
-//photo
-@property(nonatomic,strong)NSString *photoName;
-
+///photo
+@property(nonatomic,strong)UIImage *photo;
 @end
 
 NS_ASSUME_NONNULL_END

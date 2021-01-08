@@ -40,7 +40,7 @@
         NSUInteger count = photoArr.count;
         NSUInteger code;
         code = arc4random() % count;
-        model.photoName = [NSString stringWithFormat:@"imA%ld",code];
+        model.photo = [UIImage imageNamed:[NSString stringWithFormat:@"imA%ld",code]];
         model.msgType = ModelMessagePhoto;
     }
     NSDateFormatter *matter = [[NSDateFormatter alloc]init];
@@ -48,6 +48,19 @@
     NSString *timeStr = [matter stringFromDate:[NSDate date]];
     model.time = timeStr;
 //    NSLog(@"timer = %@",timeStr);
+    return model;
+}
+-(IMModel *)randomPhoto:(UIImage *)image{
+    IMModel *model = [[IMModel alloc]init];
+    model.sender = YES;
+    model.headImageURL = @"6";
+    model.photo = image;
+    model.msgType = ModelMessagePhoto;
+    NSDateFormatter *matter = [[NSDateFormatter alloc]init];
+    [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
+    NSString *timeStr = [matter stringFromDate:[NSDate date]];
+    model.time = timeStr;
+    
     return model;
 }
 -(IMTimeModel *)randomTime{
