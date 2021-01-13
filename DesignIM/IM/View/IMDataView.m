@@ -57,6 +57,14 @@
         /*
          关于时间model添加,每添加一条消息的时候,判断当前消息和上一条消息的时间差,在某个范围之内不添加,范围之外则添加;
          */
+        if (m1.msgType == ModelMessagePhoto) {
+            cell.photoImageView.tag = indexPath.row + 200000;
+            [cell.photoTap addTarget:self action:@selector(photoTag:)];
+        }
+        if (m1.msgType == ModelMessageMap) {
+            cell.locationImageView.tag = indexPath.row + 2000000;
+            [cell.locationTap addTarget:self action:@selector(locationTap:)];
+        }
         return cell;
 
     }else{
@@ -76,6 +84,24 @@
     
     
 }
+-(void)photoTag:(UITapGestureRecognizer *)tap1{
+    /*
+     1,输入框恢复到正常状态
+     2,展示的tableview也是
+     */
+    if ([self.delegate performSelector:@selector(showBigImageAction)]) {
+        [self.delegate showBigImageAction];
+    }
+    UIImageView *imageView = (UIImageView *)tap1.view;
+    [FFBigImage bigImageView:imageView];
+}
+-(void)locationTap:(UITapGestureRecognizer *)tap1{
+    NSUInteger row = tap1.view.tag - 2000000;
+    IMModel *model = dataSource[row];
+    NSLog(@"地址:%@",model.locationAddress);
+    [self.delegate showMapAction:model];
+}
+
 //
 - (void)setIMDataArray:(NSArray *)IMDataArray{
     dataSource = [IMDataArray copy];

@@ -9,12 +9,13 @@
 #import "IMTestMessage.h"
 #import "IMInputView.h"
 #import "IMLocationViewController.h"
+#import "IMShowLocationController.h"
 ///区分相册是否打开
 typedef NS_ENUM(NSUInteger,IMPhotoState){
     IMPhotoStateNormal,
     IMPhotoStateActive
 };
-@interface IMViewController ()<InputHeightDelegate,IMOtherDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
+@interface IMViewController ()<InputHeightDelegate,IMOtherDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,IMDataDelegate>{
     CGFloat height;
     CGFloat width;
     
@@ -77,6 +78,7 @@ typedef NS_ENUM(NSUInteger,IMPhotoState){
     
     CGRect oldR1 = CGRectMake(0, 0, width, height - iphoneXTop - iphoneXBottom - inputBarHeight);
     dataView = [[IMDataView alloc]initWithFrame:oldR1];
+    dataView.delegate = self;
     [self.view addSubview:dataView];
     dataView.IMTableView.userInteractionEnabled = YES;
     tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
@@ -339,7 +341,17 @@ typedef NS_ENUM(NSUInteger,IMPhotoState){
     photoState = IMPhotoStateNormal;
     NSLog(@"取消");
 }
-
+#pragma mark dataView delegate
+- (void)showBigImageAction{
+    [self tapAction];
+}
+- (void)showMapAction:(IMModel *)model{
+    [self tapAction];
+    IMShowLocationController *showVC = [[IMShowLocationController alloc]init];
+    showVC.showLocation = model.location;
+    showVC.addressStr = model.locationAddress;
+    [self.navigationController pushViewController:showVC animated:YES];
+}
 #pragma mark acrions
 -(void)addBtnAction{
     IMTestMessage *testMsg = [[IMTestMessage alloc]init];

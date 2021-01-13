@@ -58,8 +58,10 @@ UIKIT_STATIC_INLINE CGFloat cellHeightLocation(IMModel *model){
 @property(nonatomic,strong)UILabel *msgLabel;
 //photo
 @property(nonatomic,strong)UIImageView *photoImageView;
+@property(nonatomic,strong)UITapGestureRecognizer *photoTap;
 //location
 @property(nonatomic,strong)UIImageView *locationImageView;
+@property(nonatomic,strong)UITapGestureRecognizer *locationTap;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier model:(IMModel *)model;
 /// 根据model来返回cell的高度,写在IMCell类是为了方便管理
 +(CGFloat)cellHeightModel:(IMModel *)model;

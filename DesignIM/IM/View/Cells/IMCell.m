@@ -48,11 +48,18 @@
         }
         if (model.msgType == ModelMessagePhoto) {
             self.photoImageView = [[UIImageView alloc]init];
+            self.photoImageView.userInteractionEnabled = YES;
             [self.contentView addSubview:self.photoImageView];
+            self.photoTap = [[UITapGestureRecognizer alloc]init];
+            [self.photoImageView addGestureRecognizer:self.photoTap];
         }
         if (model.msgType == ModelMessageMap) {
             self.locationImageView = [[UIImageView alloc]init];
+            self.locationImageView.userInteractionEnabled = YES;
             [self.contentView addSubview:self.locationImageView];
+            self.locationTap = [[UITapGestureRecognizer alloc]init];
+            [self.locationImageView addGestureRecognizer:self.locationTap];
+
         }
     }
     return self;
