@@ -8,6 +8,12 @@
 #import "IMViewController.h"
 #import "IMTestMessage.h"
 #import "IMInputView.h"
+#import "IMLocationViewController.h"
+///区分相册是否打开
+typedef NS_ENUM(NSUInteger,IMPhotoState){
+    IMPhotoStateNormal,
+    IMPhotoStateActive
+};
 @interface IMViewController ()<InputHeightDelegate,IMOtherDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
     CGFloat height;
     CGFloat width;
@@ -25,6 +31,8 @@
     CGFloat iphoneXTop;
     
     CGFloat  boardHeight;//键盘高度
+    
+    IMPhotoState photoState;
 }
 
 @end
@@ -101,6 +109,8 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:addBtn];
 
     [self addKeyWordBoard];
+    
+    photoState = IMPhotoStateNormal;
 }
 -(void)addKeyWordBoard{
     NSLog(@"addKeyWordBoard");
@@ -114,6 +124,10 @@
     NSLog(@"键盘弹出");
     if (inputView.boxState == InputBoxKeyboard) {
         
+        return;
+    }
+    if (photoState == IMPhotoStateActive) {
+        //相册弹出状态的键盘,键盘事件不处理;
         return;
     }
     inputView.boxState = InputBoxKeyboard;
@@ -244,10 +258,36 @@
     if (stateAction == IMOtherStatePhoto) {
         [self selectImage];
     }
+    if (stateAction == IMOtherStateCamera) {
+        [self selectCameraImage];
+    }
+    if (stateAction == IMOtherStateLocation) {
+        IMLocationViewController *locationVC = [[IMLocationViewController alloc]init];
+//        locationVC.modalPresentationStyle = UIModalPresentationFullScreen;
+//        [self.navigationController presentViewController:locationVC animated:YES completion:nil];
+        [self.navigationController pushViewController:locationVC animated:YES];
+        
+        [locationVC getLoactionMessage:^(UIImage * _Nonnull image, NSString * _Nonnull address, CLLocation * _Nonnull location) {
+                IMTestMessage *testMsg = [[IMTestMessage alloc]init];
+                IMModel *model = [testMsg randomMap:image address:address location:location];
+                [dataView addData:model];
+        }];
+    }
 }
 //获取相片
 -(void)selectImage{
+    /*
+     打开相册有一个搜索框会弹出键盘,
+     当前有键盘监听事件,会导致状态混乱;
+     方案1:
+     在监听键盘事件,在相册弹出状态,放弃输入框的状态变化;
+     方案2:
+     在退出相册的时候,无论是否有弹出键盘,都把状态控制在otherView展示的状态;
+     (微信相册打开没有搜索功能,看起来是微信自己定制的)
+     选择第一种解决;
+     */
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == YES) {
+        photoState = IMPhotoStateActive;
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         imagePicker.allowsEditing = NO;
@@ -259,10 +299,26 @@
         NSLog(@"访问相册失败");
     }
 }
+//获取相机
+-(void)selectCameraImage{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        imagePicker.allowsEditing = NO;
+        imagePicker.delegate = self;
+        imagePicker.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self.navigationController presentViewController:imagePicker animated:YES completion:nil];
+    }else{
+        //
+        NSLog(@"访问摄像头失败");
+    }
+}
+
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey,id> *)info{
     [picker dismissViewControllerAnimated:YES completion:nil];
+    photoState = IMPhotoStateNormal;
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    NSLog(@"获取图片");
+    NSLog(@"获取到图片");
     /*
      获取到的图片处理:
      1,先把图片以时间的命名格式命名
@@ -280,6 +336,7 @@
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     [picker dismissViewControllerAnimated:YES completion:nil];
+    photoState = IMPhotoStateNormal;
     NSLog(@"取消");
 }
 

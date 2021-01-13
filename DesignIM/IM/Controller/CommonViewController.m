@@ -18,7 +18,7 @@
     
     self.edgesForExtendedLayout = UIRectEdgeNone;//(0,0)坐标系从导航栏下面开始;
     
-    //右边item
+    //左边item
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [backBtn setTitle:@"back" forState:UIControlStateNormal];
     [backBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

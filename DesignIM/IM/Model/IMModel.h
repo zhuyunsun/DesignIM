@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger,ModelMessageType){
     ModelMessageText = 1,
@@ -29,6 +30,10 @@ typedef NS_ENUM(NSUInteger,ModelMessageType){
 @property(nonatomic,assign)CGFloat msgHeight;
 ///photo
 @property(nonatomic,strong)UIImage *photo;
+///location,位置
+@property(nonatomic,strong)UIImage *locationImage;
+@property(nonatomic,strong)NSString *locationAddress;
+@property(nonatomic,strong)CLLocation *location;
 @end
 
 NS_ASSUME_NONNULL_END

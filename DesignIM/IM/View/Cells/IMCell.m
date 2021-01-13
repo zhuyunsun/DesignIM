@@ -49,7 +49,10 @@
         if (model.msgType == ModelMessagePhoto) {
             self.photoImageView = [[UIImageView alloc]init];
             [self.contentView addSubview:self.photoImageView];
-
+        }
+        if (model.msgType == ModelMessageMap) {
+            self.locationImageView = [[UIImageView alloc]init];
+            [self.contentView addSubview:self.locationImageView];
         }
     }
     return self;
@@ -60,6 +63,9 @@
     }
     if (model.msgType == ModelMessagePhoto) {
         return cellHeightPhoto(model);
+    }
+    if (model.msgType == ModelMessageMap) {
+        return cellHeightLocation(model);
     }
     return cellHeightDefault(model);
 }
@@ -163,6 +169,23 @@
             photoX = headImageAroundWidth;
         }
         self.photoImageView.frame = CGRectMake(photoX,y, width,imageHeight);
+
+    }
+    //map
+    if (model.msgType == ModelMessageMap) {
+        UIImage *image = model.locationImage;
+        self.locationImageView.image = image;
+        
+        CGFloat photoX = 0.0;
+        CGFloat imageHeight = cellHeightPhoto(model) *0.85;
+        CGFloat width = (image.size.width / image.size.height) * imageHeight;
+        CGFloat y = (cellHeightPhoto(model) - imageHeight) / 2;
+        if (model.isSender == YES) {
+            photoX = cellWindowWidth()  - headImageAroundWidth - width;
+        }else{
+            photoX = headImageAroundWidth;
+        }
+        self.locationImageView.frame = CGRectMake(photoX,y, width,imageHeight);
 
     }
 

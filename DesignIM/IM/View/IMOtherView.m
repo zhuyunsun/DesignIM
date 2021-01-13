@@ -27,8 +27,8 @@
         height = frame.size.height;
         width = frame.size.width;
         
-        NSArray *arr = @[@"chatBar_colorMore_photo",@"chatBar_colorMore_camera",@"chatBar_colorMore_video",@"chatBar_colorMore_location"];
-        NSArray *titleArr = @[@"相册",@"相机",@"视频",@"位置"];
+        NSArray *arr = @[@"chatBar_colorMore_photo",@"chatBar_colorMore_camera",@"chatBar_colorMore_location",@"chatBar_colorMore_video"];
+        NSArray *titleArr = @[@"相册",@"相机",@"位置",@"视频"];
         
         CGFloat v1Height = width *0.21;
         CGFloat middle = (width - arr.count *v1Height) / 5;
@@ -57,29 +57,33 @@
             label.adjustsFontSizeToFitWidth = YES;
             label.textColor = [UIColor grayColor];
             [v1 addSubview:label];
+            
+            if (i == arr.count - 1) {
+                v1.hidden = YES;//实现不了功能先隐藏
+            }
         }
 
         
         UIView *v2 = [[UIView alloc]init];
         v2.frame = CGRectMake(middle,height *0.04 *2 + v1Height, v1Height, v1Height);
         v2.backgroundColor = [UIColor clearColor];
-        [self addSubview:v2];
+//        [self addSubview:v2];
         
         UIButton *locationBtn  = [UIButton buttonWithType:UIButtonTypeCustom];
         locationBtn.frame = CGRectMake(v1Height *0.15,0, btnHeight, btnHeight);
         locationBtn.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
         [locationBtn setImage:[UIImage imageNamed:@"Connect_FileTransfer_Icon_61x61_"] forState:UIControlStateNormal];
         [locationBtn addTarget:self action:@selector(locationBtnAction:) forControlEvents:UIControlEventTouchDown];
-        [v2 addSubview:locationBtn];
+//        [v2 addSubview:locationBtn];
 
         UILabel *label = [[UILabel alloc]init];
         label.frame = CGRectMake(0, btnHeight, v1Height, v1Height *0.3);
-        label.text = @"位置";
+        label.text = @"文件";
         label.font = [UIFont systemFontOfSize:12];
         label.textAlignment = NSTextAlignmentCenter;
         label.adjustsFontSizeToFitWidth = YES;
         label.textColor = [UIColor grayColor];
-        [v2 addSubview:label];
+//        [v2 addSubview:label];
 
 
     }
@@ -100,12 +104,12 @@
         [self.delegate getOtherAction:IMOtherStateCamera];
     }
     if (i == 2) {
-        //视频对话
-        [self.delegate getOtherAction:IMOtherStateVideo];
-    }
-    if (i == 3) {
         //位置
         [self.delegate getOtherAction:IMOtherStateLocation];
+    }
+    if (i == 3) {
+        //视频对话
+        [self.delegate getOtherAction:IMOtherStateVideo];
     }
 }
 @end

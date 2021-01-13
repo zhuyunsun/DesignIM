@@ -63,6 +63,21 @@
     
     return model;
 }
+-(IMModel *)randomMap:(UIImage *)image address:(NSString *)address location:(CLLocation *)location{
+    IMModel *model = [[IMModel alloc]init];
+    model.sender = YES;
+    model.headImageURL = @"6";
+    model.locationImage = image;
+    model.locationAddress = address;
+    model.location = location;
+    model.msgType = ModelMessageMap;
+    
+    NSDateFormatter *matter = [[NSDateFormatter alloc]init];
+    [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
+    NSString *timeStr = [matter stringFromDate:[NSDate date]];
+    model.time = timeStr;
+    return model;
+}
 -(IMTimeModel *)randomTime{
     IMTimeModel *model = [[IMTimeModel alloc]init];
     NSDateFormatter *matter = [[NSDateFormatter alloc]init];

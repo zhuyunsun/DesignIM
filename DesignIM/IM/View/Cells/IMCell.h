@@ -36,6 +36,18 @@ UIKIT_STATIC_INLINE CGFloat cellHeightPhoto(IMModel *model){
     }
     return cellWindowHeight() *0.19;
 }
+/// 位置截取的高度和宽度
+UIKIT_STATIC_INLINE CGFloat cellHeightLocation(IMModel *model){
+    if (model.locationImage != nil) {
+        UIImage *image = model.locationImage;
+        if (image.size.height != 0.0 && image.size.width != 0.0) {
+            if (image.size.height > image.size.width) {
+                return cellWindowHeight() *0.23;
+            }
+        }
+    }
+    return cellWindowHeight() *0.19;
+}
 
 @interface IMCell : UITableViewCell
 @property(nonatomic,strong)UIImageView *headImageView;
@@ -46,6 +58,8 @@ UIKIT_STATIC_INLINE CGFloat cellHeightPhoto(IMModel *model){
 @property(nonatomic,strong)UILabel *msgLabel;
 //photo
 @property(nonatomic,strong)UIImageView *photoImageView;
+//location
+@property(nonatomic,strong)UIImageView *locationImageView;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier model:(IMModel *)model;
 /// 根据model来返回cell的高度,写在IMCell类是为了方便管理
 +(CGFloat)cellHeightModel:(IMModel *)model;

@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 模拟随机文字和图片数据
 -(IMModel *)randomTextAndPhoto;
 -(IMModel *)randomPhoto:(UIImage *)image;
+-(IMModel *)randomMap:(UIImage *)image address:(NSString *)address location:(CLLocation *)location;
 ///时间model
 -(IMTimeModel *)randomTime;
 @end
