@@ -104,7 +104,15 @@
 
 //
 - (void)setIMDataArray:(NSArray *)IMDataArray{
-    dataSource = [IMDataArray copy];
+    //给第一个聊天数据model补充一个时间model;
+    NSMutableArray *newArr = [IMDataArray mutableCopy];
+    IMModel *model = [newArr firstObject];
+
+    IMTimeModel *timeModel = [[IMTimeModel alloc]init];
+    timeModel.time = model.time;
+    [newArr insertObject:timeModel atIndex:0];
+
+    dataSource = [newArr copy];
     [self.IMTableView reloadData];
 }
 

@@ -43,9 +43,14 @@
     MKCoordinateRegion region = {coordinate,span};
     [showMapView setRegion:region animated:YES];
     
-    //定义大头针
-    MKAnnotationView *ann = [[MKAnnotationView alloc]init];
     
-
+    UILabel *addressLabel = [[UILabel alloc]init];
+    addressLabel.frame = CGRectMake(20, 20, width - 40, height *0.08);
+    addressLabel.text = self.addressStr;
+    addressLabel.textAlignment = NSTextAlignmentCenter;
+    addressLabel.adjustsFontSizeToFitWidth = YES;
+    addressLabel.font = [UIFont systemFontOfSize:15];
+    addressLabel.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+    [self.view addSubview:addressLabel];
 }
 @end

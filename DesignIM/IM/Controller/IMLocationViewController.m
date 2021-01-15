@@ -33,7 +33,7 @@
     [backBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchDown];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:backBtn];
-
+    
     
     location = [[CLLocationManager alloc]init];
     [location requestWhenInUseAuthorization];
@@ -59,6 +59,10 @@
 
 }
 -(void)sendAction{
+    if (addressArr.count == 0) {
+        
+        return;
+    }
     NSLog(@"发送位置信息:%@",addressArr[selectCode]);
     NSString *str = addressArr[selectCode];
     UIGraphicsBeginImageContext(self.map.frame.size);

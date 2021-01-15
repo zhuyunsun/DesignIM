@@ -7,7 +7,6 @@
 
 #import "FFBigImage.h"
 static CGRect oldframe;
-static CGRect newFrame;
 @implementation FFBigImage
 +(void)bigImageView:(UIImageView *)imageView{
     
@@ -46,7 +45,6 @@ static CGRect newFrame;
     [UIView animateWithDuration:0.3 animations:^{
         bigImageView.frame = CGRectMake(0,0,width, image.size.height * width / image.size.width);
         bigImageView.center = CGPointMake(width / 2, height / 2);
-        newFrame = bigImageView.frame;
         backBtn.alpha = 1;
     } completion:^(BOOL finished) {
 
@@ -160,6 +158,7 @@ static CGRect newFrame;
     }
 
     [UIView animateWithDuration:0.2 animations:^{
+        imageView.transform = CGAffineTransformIdentity;//复原,缩小 扩大 旋转等
         imageView.frame = centerRect;
     }];
 }
