@@ -177,7 +177,7 @@ typedef NS_ENUM(NSUInteger,IMPhotoState){
 }
 
 
-- (void)getMoreHeight:(CGFloat)moreHeight{//给弹出键盘用
+- (void)getMoreHeight:(CGFloat)moreHeight{
     NSLog(@"moreHeight = %f",moreHeight);
 //    moreHeight = moreHeight - iphoneXBottom;
     
@@ -351,6 +351,22 @@ typedef NS_ENUM(NSUInteger,IMPhotoState){
     showVC.showLocation = model.location;
     showVC.addressStr = model.locationAddress;
     [self.navigationController pushViewController:showVC animated:YES];
+}
+- (void)wordsChange:(CGFloat)height{
+    //height就是文字多出来的部分
+    //
+//    CGRect r2 = inputView.frame;
+//    r2.origin.y = r2.origin.y - height;
+//    [UIView animateWithDuration:0.23 animations:^{
+//        inputView.frame = r2;
+//    }];
+}
+- (void)sendMessage:(NSString *)msg{
+    NSLog(@"msg = %@",msg);
+    NSAttributedString *str = [[NSAttributedString alloc]initWithString:msg];
+    IMTestMessage *testMsg = [[IMTestMessage alloc]init];
+    IMModel *model = [testMsg randomText:str];
+    [dataView addData:model];
 }
 #pragma mark acrions
 -(void)addBtnAction{

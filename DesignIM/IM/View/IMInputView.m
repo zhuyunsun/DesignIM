@@ -18,6 +18,9 @@
     UIButton *otherBtn;
     
     IMFaceView *faceView;
+    
+    CGRect oldBarFrame;
+    CGRect oldMsgFrame;
 }
 @end
 @implementation IMInputView
@@ -37,6 +40,7 @@
         barView = [[UIView alloc]init];
         barView.frame = CGRectMake(0, 0,frame.size.width, 55);
         barView.backgroundColor = [UIColor clearColor];
+        oldBarFrame = barView.frame;
         [self addSubview:barView];
         
         CGFloat btnHeight = CGRectGetHeight(barView.frame) *0.5;
@@ -52,8 +56,10 @@
         CGFloat msgHeight = height *0.68;
         CGFloat msgY = (height - msgHeight) / 2;
         CGFloat msgWidth = width - (btnX *5 + btnHeight *3);
+        CGRect r1 = CGRectMake(CGRectGetMaxX(voiceBtn.frame) + btnX,msgY,msgWidth,msgHeight);
         msgTextView = [[UITextView alloc]init];
-        msgTextView.frame = CGRectMake(CGRectGetMaxX(voiceBtn.frame) + btnX,msgY,msgWidth,msgHeight);
+        msgTextView.frame = r1;
+        oldMsgFrame = r1;
         msgTextView.backgroundColor = [UIColor whiteColor];
         msgTextView.layer.cornerRadius = 3;
         msgTextView.delegate = self;
@@ -62,6 +68,13 @@
         msgTextView.scrollEnabled = NO;//文字上下回落
         msgTextView.enablesReturnKeyAutomatically = YES;//无文字灰色不可点
         [barView addSubview:msgTextView];
+        
+        msgTextView.layoutManager.allowsNonContiguousLayout = NO;
+        if (@available(iOS 13.0, *)) {
+            msgTextView.automaticallyAdjustsScrollIndicatorInsets = NO;
+        } else {
+            // Fallback on earlier versions
+        }
         
         voiceLabel = [[UILabel alloc]init];
         voiceLabel.frame = CGRectMake(CGRectGetMaxX(voiceBtn.frame) + btnX,msgY,msgWidth,msgHeight);
@@ -128,14 +141,42 @@
 }
 
 - (void)getFaceName:(NSString *)name{
-    NSLog(@"表情名称:%@",name);
     msgTextView.text = [msgTextView.text stringByAppendingString:name];
+    /*
+     输入框展示的表情两种情况:
+     第一种,文字表示表情[];
+     第二种,图文混排
+     
+     推荐第一种,第二种太复杂,每次输入都需要正则匹配表情;
+     */
+    CGSize temp = [msgTextView.text boundingRectWithSize:CGSizeMake(oldMsgFrame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:17.f],NSFontAttributeName, nil] context:nil].size;
+//    NSLog(@"temp = %f,oldMsgFrame.size.height = %f",temp.height,oldMsgFrame.size.height);
+    
+    CGFloat addHeight = temp.height - oldMsgFrame.size.height;
+//    NSLog(@"addHeight = %f",addHeight);
+//    if (addHeight > 0) {
+//        CGRect r1 = oldBarFrame;
+//        r1.size.height = r1.size.height + addHeight;
+//        barView.frame = r1;
+//
+//        CGRect r2 = oldMsgFrame;
+//        r2.size.height = r2.size.height + addHeight;
+//        msgTextView.frame = r2;
+//
+//        faceView.frame = CGRectMake(0, CGRectGetMaxY(barView.frame), width, 300 - 34);
+//        NSLog(@"CGRectGetMaxY(barView.frame) = %f",CGRectGetMaxY(barView.frame));
+//        [self.delegate wordsChange:addHeight];
+//
+//    }
 }
 - (void)getDeleteAction{
     NSLog(@"删除操作");
 }
 - (void)getSendAction{
     NSLog(@"发送操作");
+    if (msgTextView.text.length > 0) {
+        [self.delegate sendMessage:msgTextView.text];
+    }
 }
 #pragma mark actions
 -(void)voiceAction:(UIButton *)btn{

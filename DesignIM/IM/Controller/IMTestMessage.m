@@ -63,6 +63,21 @@
     
     return model;
 }
+-(IMModel *)randomText:(NSAttributedString *)msg{
+    IMModel *model = [[IMModel alloc]init];
+    model.sender = YES;
+    model.headImageURL = @"6";
+    model.msg = msg;
+    model.msgType = ModelMessageText;
+    NSDateFormatter *matter = [[NSDateFormatter alloc]init];
+    [matter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];//MM和mm区分
+    NSString *timeStr = [matter stringFromDate:[NSDate date]];
+    model.time = timeStr;
+    NSString *str = [NSString stringWithFormat:@"%@",msg];
+    model.msgHeight = [self handelHighContent:str font:13.1 size:cellWindowWidth() *0.72];
+    return model;
+
+}
 -(IMModel *)randomMap:(UIImage *)image address:(NSString *)address location:(CLLocation *)location{
     IMModel *model = [[IMModel alloc]init];
     model.sender = YES;

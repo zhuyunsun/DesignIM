@@ -34,5 +34,11 @@ typedef NS_ENUM(NSUInteger,InputBoxState){
 ///
 -(void)showFaceView:(CGFloat)moreHeight;
 -(void)showOtherView:(CGFloat)moreHeight;
+
+///
+-(void)wordsChange:(CGFloat)height;
+
+///
+-(void)sendMessage:(NSString *)msg;
 @end
 NS_ASSUME_NONNULL_END
