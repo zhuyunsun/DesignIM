@@ -368,7 +368,7 @@ typedef NS_ENUM(NSUInteger,IMPhotoState){
     IMModel *model = [testMsg randomText:str];
     [dataView addData:model];
 }
-#pragma mark acrions
+#pragma mark actions
 -(void)addBtnAction{
     IMTestMessage *testMsg = [[IMTestMessage alloc]init];
     IMModel *model = [testMsg randomTextAndPhoto];
